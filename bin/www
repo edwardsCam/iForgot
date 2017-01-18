@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('iforgot:server');
+var debug = require('debug')('iForgot:server');
 var http = require('http');
 
 /**

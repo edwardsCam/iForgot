@@ -1,8 +1,35 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 30px;
 }
 
-a {
-  color: #00B7FF;
+table {
+    text-align: left;
+}
+
+table tr td div {
+    display: inline-block;
+}
+
+table tr td.todoInput {
+    width: 85%;
+}
+
+table tr td.todoInput input {
+    width: 100%;
+}
+
+table tr td.todoEdit {
+    text-align: center;
+    width: 15%;
+}
+
+.mainDiv {
+    margin: auto;
+    width: 50%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.buttonPanel {
+    margin: 6px;
 }

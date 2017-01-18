@@ -1,0 +1,13 @@
+extends layout
+
+append content
+    div(class='mainDiv well')
+        h1= title
+        p Things to do:
+
+        table#todolist(class='table table-bordered table-hover')
+
+        div(class='buttonPanel')
+            button#btnAddTodo Add Item
+        div(class='buttonPanel')
+            button#btnSave Save
