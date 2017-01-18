@@ -37,7 +37,7 @@
         function getRowMarkup(d) {
             var ret = '<tr>';
             ret += '<td class="todoInput"><input ' + (isEnabled ? '' : 'disabled') + ' value="' + d.desc + '"></td>';
-            ret += '<td class="todoEdit"><button >Edit</button></td>';
+            ret += '<td class="todoEdit"><button><span class="glyphicon glyphicon-edit"></span></button></td>';
             ret += '</tr>';
             return ret;
         }
