@@ -34,10 +34,7 @@ router.get('/main', function(req, res, next) {
 router.get('/todo/:userId', function(req, res, next) {
 
     var userId = req.params.userId;
-    var query = {
-        userId: userId
-    };
-    User.findOne(query, function(err, userData) {
+    User.find().byId(userId).exec(function(err, userData) {
         if (err) console.error(err);
         if (userData) res.send(userData.todo);
     });

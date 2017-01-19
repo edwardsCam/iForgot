@@ -7,10 +7,7 @@ router.get('/profile/:userId', function(req, res, next) {
     var userId = req.params.userId;
     if (!userId) res.json('Was not given a userId.');
 
-    var query = {
-        userId: userId
-    };
-    User.findOne(query, function(err, userData) {
+    User.find().byId(userId).exec(function(err, userData) {
         if (err) console.error(err);
         else if (userData) res.send(userData);
     });
@@ -28,10 +25,7 @@ router.post('/login', function(req, res, next) {
 
 router.post('/register', function(req, res, next) {
 
-    var query = {
-        userName: req.body.user
-    };
-    User.findOne(query, function(err, userData) {
+    User.find().byName(req.body.user).exec(function(err, userData) {
         if (err) console.error(err);
         else if (userData) {
             res.status(409);
