@@ -1,0 +1,25 @@
+extends layout
+
+append header
+    script(src='/javascripts/login.js')
+
+append content
+    div(class='mainDiv')
+        h1= title
+        p Login
+
+        div(class='loginDiv well')
+
+            div(class='loginInput')
+                span(class='glyphicon glyphicon-user')
+                input#inpLoginUsername(placeholder="Username")
+
+            div(class='loginInput')
+                span(class='glyphicon glyphicon-lock')
+                input#inpLoginPassword(placeholder="Password" type="password")
+
+            div(class='loginInput')
+                button#btnLogin Login
+
+            div(class='loginInput')
+                a#linkCreateAct(href='/register') Create Account

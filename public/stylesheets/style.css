@@ -33,3 +33,20 @@ table tr td.todoEdit {
 .buttonPanel {
     margin: 6px;
 }
+
+.loginDiv {
+    margin: auto;
+    width: 75%;
+}
+
+.loginInput {
+    margin-bottom: 5px;
+}
+
+.loginInput .glyphicon {
+    margin: 5px;
+}
+
+.loginInput button {
+    width: 100%;
+}

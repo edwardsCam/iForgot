@@ -1,0 +1,19 @@
+extends layout
+
+append content
+    div(class='mainDiv')
+        h1= title
+        p Register
+
+        div(class='loginDiv well')
+
+            div(class='loginInput')
+                span(class='glyphicon glyphicon-user')
+                input#inpCreateUsername(placeholder="Username")
+
+            div(class='loginInput')
+                span(class='glyphicon glyphicon-lock')
+                input#inpCreatePassword(placeholder="Password")
+
+            div(class='loginInput')
+                button#btnCreateAct Sign Up
