@@ -6,9 +6,7 @@ mongoose.set('debug', true);
 
 var userSchema = mongoose.Schema({
     userId: {
-        type: Number,
-        unique: true,
-        required: true
+        type: Number
     },
     userName: {
         type: String,

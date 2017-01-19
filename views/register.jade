@@ -1,5 +1,8 @@
 extends layout
 
+append header
+    script(src='/javascripts/register.js')
+
 append content
     div(class='mainDiv')
         h1= title
@@ -13,7 +16,7 @@ append content
 
             div(class='loginInput')
                 span(class='glyphicon glyphicon-lock')
-                input#inpCreatePassword(placeholder="Password")
+                input#inpCreatePassword(placeholder="Password" type="password")
 
             div(class='loginInput')
                 button#btnCreateAct Sign Up

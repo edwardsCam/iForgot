@@ -18,10 +18,41 @@ router.get('/profile/:userId', function(req, res, next) {
 
 router.post('/login', function(req, res, next) {
 
+    // var token = newUser.generateJwt();
+    // res.status(200);
+    // res.json({
+    //     token: token
+    // });
+
 });
 
 router.post('/register', function(req, res, next) {
 
+    var query = {
+        userName: req.body.user
+    };
+    User.findOne(query, function(err, userData) {
+        if (err) console.error(err);
+        else if (userData) {
+            res.status(409);
+            res.send('A user with that username already exists.');
+        } else {
+            createUser();
+        }
+    });
+
+    function createUser() {
+        var newUser = new User();
+        newUser.userName = req.body.user;
+        newUser.setPassword(req.body.pass);
+        newUser.save(function(err, userData) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            res.json(userData);
+        });
+    }
 });
 
 module.exports = router;

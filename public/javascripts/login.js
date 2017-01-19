@@ -11,13 +11,15 @@
             var userName = inpUser.val(),
                 pass = inpPass.val();
 
-            if (!userName) {
-                alert('Please enter your username.');
-                return;
-            }
-            if (!pass) {
-                alert('Please enter your password.');
-                return;
+            /* validation */ {
+                if (!userName) {
+                    alert('Please enter your username.');
+                    return;
+                }
+                if (!pass) {
+                    alert('Please enter your password.');
+                    return;
+                }
             }
 
             $.ajax({
