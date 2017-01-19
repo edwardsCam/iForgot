@@ -26,14 +26,21 @@ router.get('/register', function(req, res, next) {
 
 // get main
 // render todo list
-router.get('/main', function(req, res, next) {
-    res.render('todo', titleObj);
+router.post('/main', ensureAuthorized, function(req, res, next) {
+    res.send();
 });
 
-// get list of todo items for a user
-router.get('/todo/:userId', function(req, res, next) {
+router.get('/main', function(req, res, next) {
+    if (wasDirectedHere(req)) {
+        res.render('todo', titleObj);
+        res.sendStatus(200);
+    } else next();
+}, invalidAccess);
 
-    var userId = req.params.userId;
+// get list of todo items for a user
+router.get('/todo/:userId', ensureAuthorized, function(req, res, next) {
+
+    var userId = parseInt(req.params.userId);
     User.find().byId(userId).exec(function(err, userData) {
         if (err) console.error(err);
         if (userData) res.send(userData.todo);
@@ -42,9 +49,9 @@ router.get('/todo/:userId', function(req, res, next) {
 });
 
 // set the list of todo items for a user
-router.post('/todo/:userId', function(req, res, next) {
+router.post('/todo/:userId', ensureAuthorized, function(req, res, next) {
 
-    var userId = req.params.userId;
+    var userId = parseInt(req.params.userId);
     var query = {
         userId: userId
     };
@@ -58,6 +65,25 @@ router.post('/todo/:userId', function(req, res, next) {
         if (err) console.log(err);
         if (userData) res.send(userData);
     });
+
 });
+
+function ensureAuthorized(req, res, next) {
+    var token = req.body.token || req.headers['authorization'];
+    if (token) {
+        next();
+    } else {
+        res.sendStatus(401);
+    }
+}
+
+function invalidAccess(req, res, next) {
+    res.sendStatus(401);
+    console.log('you lose, good day sir');
+}
+
+function wasDirectedHere(req) {
+    return req.get('Referer') != null;
+}
 
 module.exports = router;

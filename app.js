@@ -1,20 +1,22 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var _ = require('lodash');
+var express = require('express'),
+    path = require('path'),
+    favicon = require('serve-favicon'),
+    logger = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    config = require('./cfg/config'),
+    _ = require('lodash');
 
 // Database
-var mongo = require('mongodb');
-var mongoose = require('mongoose');
+var mongo = require('mongodb'),
+    mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/iForgot');
+mongoose.connect(config.dbUrl);
 var db = mongoose.connection;
 
-var index = require('./routes/index');
-var user = require('./routes/user');
+// Routes
+var index = require('./routes/index'),
+    user = require('./routes/user');
 
 var app = express();
 

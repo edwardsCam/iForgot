@@ -2,6 +2,8 @@
 
     $(document).ready(function() {
 
+        delete window.localStorage['token'];
+
         var inpUser = $('#inpLoginUsername'),
             inpPass = $('#inpLoginPassword');
 
@@ -22,29 +24,34 @@
                 }
             }
 
+            var data = {
+                user: userName,
+                pass: pass
+            };
             $.ajax({
-                type: 'GET',
-                url: '/user/profile/' + userName,
-                success: checkIfUserExists,
+                type: 'POST',
+                url: '/user/login',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(msg) {
+                    alert('success!');
+                    window.localStorage['token'] = msg.token;
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '/main',
+                        data: JSON.stringify({
+                            token: window.localStorage['token']
+                        }),
+                        contentType: 'application/json',
+                        success: function() {
+                            window.location = '/main';
+                        },
+                        error: loginError
+                    });
+                },
                 error: loginError
             });
-
-            function checkIfUserExists(data) {
-                if (data) {
-                    checkIfPasswordIsCorrect(data);
-                } else {
-                    alert('There is no user with that username.');
-                }
-            }
-
-            function checkIfPasswordIsCorrect(data) {
-                if (data.passHash === pass) {
-                    alert('good');
-                    window.location = '/main';
-                } else {
-                    alert('Invalid password');
-                }
-            }
 
             function loginError(msg) {
                 alert('Error logging in.');

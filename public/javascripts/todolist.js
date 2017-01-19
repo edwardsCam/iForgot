@@ -1,6 +1,6 @@
 (function() {
 
-    var userId = 'testUser'; // temporary, for testing
+    var userId = 1; // temporary, for testing
 
     $(document).ready(function() {
 
@@ -15,7 +15,11 @@
         });
 
         function getTodoList() {
-            return $.get('/todo/' + userId).promise();
+            return $.ajax({
+                type: 'GET',
+                url: '/todo/' + userId,
+                headers: headers()
+            }).promise();
         }
     });
 
@@ -60,6 +64,7 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 url: '/todo/' + userId,
+                headers: headers(),
                 success: function(resp) {
                     alert('Saved!');
                     console.log(resp);
@@ -83,6 +88,12 @@
     function newRow(text) {
         return {
             desc: text || ''
+        };
+    }
+
+    function headers() {
+        return {
+            authorization: window.localStorage['token']
         };
     }
 
