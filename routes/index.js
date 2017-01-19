@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
+var User = require('../schemas/userSchema');
+
 // get homepage
 // render homepage
 router.get('/', function(req, res, next) {
@@ -10,37 +12,36 @@ router.get('/', function(req, res, next) {
 });
 
 // get list of todo items for a user
-router.get('/todo/:id', function(req, res, next) {
+router.get('/todo/:userId', function(req, res, next) {
 
-    var userId = parseInt(req.params.id);
-    req.db.get('userlist').findOne({
+    var userId = req.params.userId;
+    var query = {
         userId: userId
-    }, {}).then((resp) => {
-        res.json(resp.todo);
+    };
+    User.findOne(query, function(err, userData) {
+        if (err) console.error(err);
+        if (userData) res.send(userData.todo);
     });
 
 });
 
 // set the list of todo items for a user
-router.post('/todo/:id', function(req, res, next) {
+router.post('/todo/:userId', function(req, res, next) {
 
-    var userId = parseInt(req.params.id);
-    var query = {
-        userId: userId
-    };
-    var update = {
-        $set: {
-            todo: req.body
-        }
-    };
-    var options = {
-        new: true,
-        upsert: true
-    };
-    req.db.get('userlist').findOneAndUpdate(query, update, options, function(err, doc) {
-        console.log(doc);
-        res.json(doc);
-    });
+     var userId = req.params.userId;
+     var query = {
+         userId: userId
+     };
+     var options = {
+         $set: {
+             todo: req.body
+         }
+     };
+
+     User.update(query, options, function(err, userData) {
+         if (err) console.log(err);
+         if (userData) res.send(userData);
+     });
 });
 
 module.exports = router;

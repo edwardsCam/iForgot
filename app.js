@@ -8,8 +8,10 @@ var _ = require('lodash');
 
 // Database
 var mongo = require('mongodb');
-var monk = require('monk');
-var db = monk('localhost:27017/iForgot');
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:27017/iForgot');
+var db = mongoose.connection;
 
 var index = require('./routes/index');
 

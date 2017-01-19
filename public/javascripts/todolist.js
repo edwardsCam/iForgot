@@ -1,6 +1,6 @@
 (function() {
 
-    var userId = 2; // temporary, for testing
+    var userId = 'testUser'; // temporary, for testing
 
     $(document).ready(function() {
 
