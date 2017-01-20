@@ -6,6 +6,6 @@ A simple todo-list app using Mongo, Express, and Node
 * npm
 
 ## Setup
-* `npm install`
-* `npm start`
-* Open up `http://localhost:3000`
+1. `npm install`
+2. `npm start`
+3. Open up `http://localhost:3000`
