@@ -1,5 +1,6 @@
 var express = require('express'),
     User = require('../schemas/User'),
+    ObjectId = require('mongodb').ObjectId,
     router = express.Router();
 
 var titleObj = {
@@ -40,7 +41,7 @@ router.get('/main', function(req, res, next) {
 // get list of todo items for a user
 router.get('/todo/:userId', ensureAuthorized, function(req, res, next) {
 
-    var userId = parseInt(req.params.userId);
+    var userId = new ObjectId(req.params.userId);
     User.find().byId(userId).exec(function(err, userData) {
         if (err) console.error(err);
         if (userData) res.send(userData.todo);
@@ -51,9 +52,9 @@ router.get('/todo/:userId', ensureAuthorized, function(req, res, next) {
 // set the list of todo items for a user
 router.post('/todo/:userId', ensureAuthorized, function(req, res, next) {
 
-    var userId = parseInt(req.params.userId);
+    var userId = new ObjectId(req.params.userId);
     var query = {
-        userId: userId
+        _id: userId
     };
     var options = {
         $set: {

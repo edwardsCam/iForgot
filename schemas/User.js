@@ -6,11 +6,6 @@ var mongoose = require('mongoose'),
 mongoose.set('debug', true);
 
 var userSchema = mongoose.Schema({
-    userId: {
-        type: Number,
-        required: true,
-        unique: true
-    },
     userName: {
         type: String,
         required: true
@@ -35,7 +30,7 @@ userSchema.methods.generateJwt = function() {
     expiry.setDate(expiry.getDate() + 7);
 
     return jwt.sign({
-        userId: this.userId,
+        userId: this._id,
         userName: this.userName,
         exp: parseInt(expiry.getTime() / 1000)
     }, config.secret);
@@ -48,7 +43,7 @@ userSchema.query.byName = function(name) {
 }
 userSchema.query.byId = function(id) {
     return this.findOne({
-        userId: id
+        _id: id
     });
 }
 

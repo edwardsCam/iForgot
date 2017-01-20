@@ -1,6 +1,6 @@
 (function() {
 
-    var userId = 1; // temporary, for testing
+    var userId = window.localStorage['userId'];
 
     $(document).ready(function() {
 

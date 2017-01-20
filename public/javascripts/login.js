@@ -36,6 +36,7 @@
                 success: function(msg) {
                     alert('success!');
                     window.localStorage['token'] = msg.token;
+                    window.localStorage['userId'] = msg.userId;
 
                     $.ajax({
                         type: 'POST',
@@ -44,7 +45,7 @@
                             token: window.localStorage['token']
                         }),
                         contentType: 'application/json',
-                        success: function() {
+                        success: function(msg) {
                             window.location = '/main';
                         },
                         error: loginError
@@ -54,7 +55,7 @@
             });
 
             function loginError(msg) {
-                alert('Error logging in.');
+                alert('Bad login.');
                 console.error(msg);
             }
         }
