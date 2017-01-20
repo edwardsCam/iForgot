@@ -1,7 +1,8 @@
 var mongoose = require('mongoose'),
     crypto = require('crypto'),
     jwt = require('jsonwebtoken'),
-    config = require('../cfg/config');
+    config = require('../cfg/config'),
+    TodoItem = require('./TodoItem');
 
 mongoose.set('debug', true);
 
@@ -10,9 +11,7 @@ var userSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    todo: [{
-        desc: String
-    }],
+    todo: [TodoItem.schema],
     hash: String,
     salt: String
 });
