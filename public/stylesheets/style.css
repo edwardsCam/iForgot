@@ -1,23 +1,19 @@
 body {
-  padding: 30px;
+    padding: 30px;
 }
 
 table {
     text-align: left;
 }
-
 table tr td div {
     display: inline-block;
 }
-
 table tr td.todoInput {
     width: 85%;
 }
-
 table tr td.todoInput input {
     width: 100%;
 }
-
 table tr td.todoEdit {
     text-align: center;
     width: 15%;
@@ -38,15 +34,27 @@ table tr td.todoEdit {
     margin: auto;
     width: 75%;
 }
-
 .loginInput {
     margin-bottom: 5px;
 }
-
 .loginInput .glyphicon {
     margin: 5px;
 }
-
 .loginInput button {
     width: 100%;
+}
+
+.inner-addon {
+    position: relative;
+}
+.inner-addon .glyphicon {
+    position: absolute;
+    padding: 5px;
+    pointer-events: none;
+}
+.left-addon .glyphicon {
+    left: 0px;
+}
+.left-addon input {
+    padding-left: 30px;
 }

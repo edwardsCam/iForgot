@@ -6,20 +6,20 @@ append header
 append content
     div(class='mainDiv')
         h1= title
-        p Login
+        h4 Login
 
-        div(class='loginDiv well')
+        form(class='loginDiv well')
 
-            div(class='loginInput')
+            div(class='loginInput form-group inner-addon left-addon')
                 span(class='glyphicon glyphicon-user')
-                input#inpLoginUsername(placeholder="Username")
+                input#inpLoginUsername(class="form-control" placeholder="Username")
 
-            div(class='loginInput')
+            div(class='loginInput form-group inner-addon left-addon')
                 span(class='glyphicon glyphicon-lock')
-                input#inpLoginPassword(placeholder="Password" type="password")
+                input#inpLoginPassword(class="form-control" placeholder="Password" type="password")
 
             div(class='loginInput')
-                button#btnLogin Login
+                button#btnLogin(class='btn btn-primary') Login
 
             div(class='loginInput')
                 a(href='/register') Create Account

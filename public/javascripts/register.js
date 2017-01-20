@@ -7,7 +7,8 @@
 
         $('#btnCreateAct').on('click', pressRegister);
 
-        function pressRegister(event) {
+        function pressRegister(e) {
+            e.preventDefault();
             var userName = inpUser.val(),
                 pass = inpPass.val();
 

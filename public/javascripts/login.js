@@ -9,7 +9,8 @@
 
         $('#btnLogin').on('click', pressLogin);
 
-        function pressLogin(event) {
+        function pressLogin(e) {
+            e.preventDefault();
             var userName = inpUser.val(),
                 pass = inpPass.val();
 
