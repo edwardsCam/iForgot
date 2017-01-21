@@ -46,9 +46,7 @@
                     });
                 },
                 error: function(err) {
-                    if (err.status === 409) {
-                        bootbox.alert(err.responseText);
-                    } else console.error(err);
+                    bootbox.alert(err.responseText);
                 }
             });
 

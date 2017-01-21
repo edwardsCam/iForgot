@@ -9,27 +9,21 @@
         });
         $('#btnSave').on('click', saveList);
 
-        getTodoList().then(populateTable);
-
-        function getTodoList() {
-            return $.ajax({
-                type: 'GET',
-                url: '/todo/' + userId,
-                headers: headers()
-            }).promise();
-        }
+        $.ajax({
+            type: 'GET',
+            url: '/todo/' + userId,
+            headers: headers(),
+            success: populateTable
+        });
     });
 
     function populateTable(data) {
         $('#todolist').empty();
-        data = _.sortBy(data, 'done');
-        data.forEach(createRow);
+        _.sortBy(data, 'done').forEach(createRow);
     }
 
     function createRow(d) {
-        var html = getRowMarkup(d);
-        $('#todolist').append(html);
-
+        $('#todolist').append(getRowMarkup(d));
         function getRowMarkup(d) {
             var ret = '<tr>';
             ret += '<td class="todoDone"><input type="checkbox" ' + (d.done ? 'checked disabled' : '') + '></td>';
@@ -56,22 +50,25 @@
                 success: function(resp) {
                     populateTable(data);
                     bootbox.alert('Save successful!');
+                },
+                error: function(err) {
+                    bootbox.alert('Error getting todo list.');
                 }
             });
         });
 
         function getClientSideData() {
             return $('#todolist tr').map(function() {
-                var row = $(this);
-                var checkbox = row.find('.todoDone input');
-                var text = row.find('.todoInput input');
-                return newRow(text.val(), checkbox.is(':checked'));
+                var row = $(this),
+                    isChecked = row.find('.todoDone input').is(':checked'),
+                    text = row.find('.todoInput input').val();
+                return newRow(text, isChecked);
             }).toArray();
         }
 
         function validate(data) {
             return data.every(function(d) {
-                return d.desc;
+                return d.done ? d.desc : true;
             });
         }
     }
