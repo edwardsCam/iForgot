@@ -6,11 +6,11 @@ append header
 append content
     div(class='mainDiv well')
         h1= title
-        p Things to do:
+        h4 Things to do:
 
-        table#todolist(class='table table-bordered table-hover')
+        table#todolist(class='table table-bordered table-hover table-condensed')
 
         div(class='buttonPanel')
-            button#btnAddTodo Add Item
+            button#btnAddTodo(class='btn btn-primary') Add Item
         div(class='buttonPanel')
-            button#btnSave Save
+            button#btnSave(class='btn btn-warning') Save

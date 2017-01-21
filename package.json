@@ -14,7 +14,6 @@
     "jade": "~1.9.2",
     "jade-bootstrap": "^1.0.9",
     "jsonwebtoken": "^7.2.1",
-    "lodash": "~4.17.4",
     "mongodb": "~2.2.21",
     "mongoose": "^4.7.7",
     "morgan": "~1.5.3",

@@ -4,15 +4,12 @@
 
     $(document).ready(function() {
 
-        $('#btnAddTodo').on('click', addItem);
+        $('#btnAddTodo').on('click', function() {
+            createRow(newRow());
+        });
         $('#btnSave').on('click', saveList);
 
-        getTodoList().then(function(resp) {
-            resp.forEach(function(d) {
-                createRow(d, false);
-            });
-            registerEditButtons();
-        });
+        getTodoList().then(populateTable);
 
         function getTodoList() {
             return $.ajax({
@@ -23,42 +20,33 @@
         }
     });
 
-    function registerEditButtons() {
-        $('.todoEdit').unbind();
-        $('.todoEdit').on('click', function(e) {
-            var row = $(this).closest('tr');
-            var rowidx = row.index();
-
-            var inp = row.children('td').children('input');
-            inp.removeAttr('disabled');
-        });
+    function populateTable(data) {
+        $('#todolist').empty();
+        data = _.sortBy(data, 'done');
+        data.forEach(createRow);
     }
 
-    function createRow(d, isEnabled) {
+    function createRow(d) {
         var html = getRowMarkup(d);
         $('#todolist').append(html);
 
         function getRowMarkup(d) {
             var ret = '<tr>';
-            ret += '<td class="todoInput"><input ' + (isEnabled ? '' : 'disabled') + ' value="' + d.desc + '"></td>';
-            ret += '<td class="todoEdit"><button><span class="glyphicon glyphicon-edit"></span></button></td>';
+            ret += '<td class="todoDone"><input type="checkbox" ' + (d.done ? 'checked disabled' : '') + '></td>';
+            ret += '<td class="todoInput"><input class="form-control todoVal" value="' + d.desc + '" ' + (d.done ? 'disabled' : '') + '></td>';
             ret += '</tr>';
             return ret;
         }
     }
 
-    function addItem() {
-        createRow(newRow(), true);
-        registerEditButtons();
-    }
-
     function saveList(event) {
         var data = getClientSideData();
         if (!validate(data)) {
-            alert('Invalid input!');
+            bootbox.alert('Invalid input!');
             return;
         }
-        if (confirm('Are you sure you want to save?')) {
+        bootbox.confirm('Are you sure you want to save?', function(resp) {
+            if (!resp) return;
             $.ajax({
                 type: 'POST',
                 data: JSON.stringify(data),
@@ -66,15 +54,18 @@
                 url: '/todo/' + userId,
                 headers: headers(),
                 success: function(resp) {
-                    alert('Saved!');
-                    console.log(resp);
+                    populateTable(data);
+                    bootbox.alert('Save successful!');
                 }
             });
-        }
+        });
 
         function getClientSideData() {
-            return $('#todolist tr input').map(function() {
-                return newRow($(this).val());
+            return $('#todolist tr').map(function() {
+                var row = $(this);
+                var checkbox = row.find('.todoDone input');
+                var text = row.find('.todoInput input');
+                return newRow(text.val(), checkbox.is(':checked'));
             }).toArray();
         }
 
@@ -85,9 +76,10 @@
         }
     }
 
-    function newRow(text) {
+    function newRow(text, isChecked) {
         return {
-            desc: text || ''
+            desc: text || '',
+            done: (isChecked === undefined ? false : isChecked)
         };
     }
 

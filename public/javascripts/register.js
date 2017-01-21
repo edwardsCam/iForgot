@@ -14,19 +14,19 @@
 
             /* validation */ {
                 if (!userName) {
-                    alert('Please enter a username.');
+                    bootbox.alert('Please enter a username.');
                     return;
                 }
                 if (userName.length < 3) {
-                    alert('Please use at least a 3-character username.');
+                    bootbox.alert('Please use at least a 3-character username.');
                     return;
                 }
                 if (!pass) {
-                    alert('Please enter a password.');
+                    bootbox.alert('Please enter a password.');
                     return;
                 }
                 if (pass.length < 5) {
-                    alert('Please use at least a 5-character password.');
+                    bootbox.alert('Please use at least a 5-character password.');
                     return;
                 }
             }
@@ -41,11 +41,13 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 success: function(resp) {
-                    window.location = '/login';
+                    bootbox.alert('Register successful!', function() {
+                        window.location = '/login';
+                    });
                 },
                 error: function(err) {
                     if (err.status === 409) {
-                        alert(err.responseText);
+                        bootbox.alert(err.responseText);
                     } else console.error(err);
                 }
             });

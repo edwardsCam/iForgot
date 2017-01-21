@@ -9,19 +9,21 @@ table tr td div {
     display: inline-block;
 }
 table tr td.todoInput {
-    width: 85%;
+    width: 95%;
 }
 table tr td.todoInput input {
     width: 100%;
 }
-table tr td.todoEdit {
-    text-align: center;
-    width: 15%;
+table tr td.todoDone {
+    text-align: right;
+    padding-top: 13px !important;
+    width: 5%;
 }
 
 .mainDiv {
     margin: auto;
     width: 50%;
+    min-width: 300px;
     max-width: 500px;
     text-align: center;
 }

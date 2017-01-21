@@ -4,8 +4,7 @@ var express = require('express'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
-    config = require('./cfg/config'),
-    _ = require('lodash');
+    config = require('./cfg/config');
 
 // Database
 var mongo = require('mongodb'),

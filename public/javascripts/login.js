@@ -16,11 +16,11 @@
 
             /* validation */ {
                 if (!userName) {
-                    alert('Please enter your username.');
+                    bootbox.alert('Please enter your username.');
                     return;
                 }
                 if (!pass) {
-                    alert('Please enter your password.');
+                    bootbox.alert('Please enter your password.');
                     return;
                 }
             }
@@ -35,7 +35,6 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 success: function(msg) {
-                    alert('success!');
                     window.localStorage['token'] = msg.token;
                     window.localStorage['userId'] = msg.userId;
 
@@ -56,7 +55,7 @@
             });
 
             function loginError(msg) {
-                alert('Bad login.');
+                bootbox.alert('Bad login.');
                 console.error(msg);
             }
         }
