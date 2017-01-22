@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
     config = require('../cfg/config'),
     TodoItem = require('./TodoItem');
 
-mongoose.set('debug', true);
+//mongoose.set('debug', true);
 
 var userSchema = mongoose.Schema({
     userName: {

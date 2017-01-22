@@ -1,57 +1,63 @@
-(function() {
+if (!module) var module = {};
+module.exports = (function() {
 
     $(document).ready(function() {
-
         var inpUser = $('#inpCreateUsername'),
             inpPass = $('#inpCreatePassword');
-
-        $('#btnCreateAct').on('click', pressRegister);
-
-        function pressRegister(e) {
+        $('#btnCreateAct').on('click', function(e) {
             e.preventDefault();
-            var userName = inpUser.val(),
-                pass = inpPass.val();
-
-            /* validation */ {
-                if (!userName) {
-                    bootbox.alert('Please enter a username.');
-                    return;
-                }
-                if (userName.length < 3) {
-                    bootbox.alert('Please use at least a 3-character username.');
-                    return;
-                }
-                if (!pass) {
-                    bootbox.alert('Please enter a password.');
-                    return;
-                }
-                if (pass.length < 5) {
-                    bootbox.alert('Please use at least a 5-character password.');
-                    return;
-                }
-            }
-
             var data = {
-                user: userName,
-                pass: pass
+                userName: inpUser.val(),
+                pass: inpPass.val()
             };
-            $.ajax({
-                type: 'POST',
-                url: '/user/register',
-                data: JSON.stringify(data),
-                contentType: 'application/json',
-                success: function(resp) {
-                    if (resp.success) {
-                        bootbox.alert('Registration successful!', function() {
-                            window.location = '/login';
-                        });
-                    } else if (resp.msg) {
-                        bootbox.alert(resp.msg);
-                    }
-                }
-            });
-        }
-
+            if (validateInput(data)) {
+                postToRegister(data);
+            }
+        });
     });
+
+    return {
+        validateInput: validateInput
+    };
+
+    function postToRegister(payload) {
+        $.ajax({
+            type: 'POST',
+            url: '/user/register',
+            data: JSON.stringify(payload),
+            contentType: 'application/json',
+            success: successFunc
+        });
+
+        function successFunc(resp) {
+            if (resp.success) {
+                bootbox.alert('Registration successful!', function() {
+                    window.location = '/login';
+                });
+            } else if (resp.msg) {
+                bootbox.alert(resp.msg);
+            }
+        }
+    }
+
+    function validateInput(data, ignoreLog) {
+        if (!data.userName) {
+            if (!ignoreLog) bootbox.alert('Please enter a username.');
+            return false;
+        }
+        if (data.userName.length < 3) {
+            if (!ignoreLog) bootbox.alert('Please use at least a 3-character username.');
+            return false;
+        }
+        if (!data.pass) {
+            if (!ignoreLog) bootbox.alert('Please enter a password.');
+            return false;
+        }
+        if (data.pass.length < 5) {
+            if (!ignoreLog) bootbox.alert('Please use at least a 5-character password.');
+            return false;
+        }
+        return true;
+    };
 
 })();

@@ -28,14 +28,15 @@ router.get('/register', function(req, res, next) {
 // get main
 // render todo list
 router.post('/main', ensureAuthorized, function(req, res, next) {
-    res.send();
+    res.status(200).json({});
 });
 
 router.get('/main', function(req, res, next) {
     if (wasDirectedHere(req)) {
         res.render('todo', titleObj);
-        res.sendStatus(200);
-    } else next();
+    } else {
+        next();
+    }
 }, invalidAccess);
 
 // get list of todo items for a user
@@ -70,12 +71,15 @@ router.post('/todo/:userId', ensureAuthorized, function(req, res, next) {
 });
 
 function ensureAuthorized(req, res, next) {
-    var token = req.body.token || req.headers['authorization'];
-    if (token) {
-        next();
-    } else {
-        res.sendStatus(401);
+    var authHeader = req.headers['authorization'];
+    if (authHeader) {
+        var token = authHeader.split(' ')[1];
+        if (token) {
+            next();
+            return;
+        }
     }
+    res.sendStatus(401);
 }
 
 function invalidAccess(req, res, next) {

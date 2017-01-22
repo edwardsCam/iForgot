@@ -1,4 +1,5 @@
-(function() {
+if (!module) var module = {};
+module.exports = (function() {
 
     $(document).ready(function() {
 
@@ -11,47 +12,66 @@
 
         function pressLogin(e) {
             e.preventDefault();
-            var userName = inpUser.val(),
-                pass = inpPass.val();
-
-            /* validation */ {
-                if (!userName) {
-                    bootbox.alert('Please enter your username.');
-                    return;
-                }
-                if (!pass) {
-                    bootbox.alert('Please enter your password.');
-                    return;
-                }
+            var data = {
+                userName: inpUser.val(),
+                pass: inpPass.val()
+            };
+            if (validateInput(data)) {
+                postToLogin(data);
             }
-
-            $.ajax({
-                type: 'POST',
-                url: '/user/login',
-                data: JSON.stringify({
-                    user: userName,
-                    pass: pass
-                }),
-                contentType: 'application/json',
-                success: function(resp) {
-                    if (resp.success) {
-                        window.localStorage.token = resp.token;
-                        $.ajax({
-                            type: 'POST',
-                            url: '/main',
-                            data: JSON.stringify({ token:window.localStorage.token }),
-                            contentType: 'application/json',
-                            success: function(msg) { window.location = '/main'; }
-                        });
-                    } else if (resp.msg) {
-                        bootbox.alert(resp.msg);
-                    }
-                }
-            });
         }
-
     });
 
+    return {
+        validateInput: validateInput
+    };
 
+    function validateInput(data, ignoreLog) {
+        if (!data.userName) {
+            if (!ignoreLog) bootbox.alert('Please enter your username.');
+            return false;
+        }
+        if (!data.pass) {
+            if (!ignoreLog) bootbox.alert('Please enter your password.');
+            return false;
+        }
+        return true;
+    }
+
+    function postToLogin(payload) {
+        $.ajax({
+            type: 'POST',
+            url: '/user/login',
+            data: JSON.stringify(payload),
+            contentType: 'application/json',
+            success: successFunc
+        });
+
+        function successFunc(resp) {
+            if (resp.success) {
+                window.localStorage.token = resp.msg;
+                postToMain();
+            } else if (resp.msg) {
+                bootbox.alert(resp.msg);
+            }
+        }
+    }
+
+    function postToMain() {
+        $.ajax({
+            type: 'POST',
+            url: '/main',
+            headers: headers(),
+            success: function() {
+                window.location = '/main';
+            }
+        });
+    }
+
+    function headers() {
+        return {
+            authorization: 'Bearer ' + window.localStorage.token
+        };
+    }
 
 })();

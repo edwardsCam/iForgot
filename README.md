@@ -6,6 +6,13 @@ A simple todo-list app using Mongo, Express, and Node
 * npm
 
 ## Setup
-1. `npm install`
-2. `npm start`
-3. Open up `http://localhost:3000`
+1. `git clone https://github.com/edwardsCam/iForgot.git`
+2. `cd iForgot`
+3. `npm install`
+
+## Run
+1. `npm start`
+2. Open up `http://localhost:3000`
+
+## Test
+1. `npm test`

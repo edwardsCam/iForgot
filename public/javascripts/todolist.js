@@ -94,7 +94,7 @@
 
     function headers() {
         return {
-            authorization: window.localStorage.token
+            authorization: 'Bearer ' + window.localStorage.token
         };
     }
 
