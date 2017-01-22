@@ -1,6 +1,6 @@
 (function() {
 
-    var userId = window.localStorage['userId'];
+    var userId = getUserId();
 
     $(document).ready(function() {
 
@@ -8,6 +8,7 @@
             createRow(newRow());
         });
         $('#btnSave').on('click', saveList);
+        $('#btnLogout').on('click', logout);
 
         $.ajax({
             type: 'GET',
@@ -68,9 +69,20 @@
 
         function validate(data) {
             return data.every(function(d) {
-                return d.done ? d.desc : true;
+                return d.done || !_.isNil(d.desc);
             });
         }
+    }
+
+    function getUserId() {
+        var token = window.localStorage.token.split('.'),
+            claim = atob(token[1]);
+        return JSON.parse(claim).userId;
+    }
+
+    function logout() {
+        delete window.localStorage.token;
+        window.location = '/login';
     }
 
     function newRow(text, isChecked) {
@@ -82,7 +94,7 @@
 
     function headers() {
         return {
-            authorization: window.localStorage['token']
+            authorization: window.localStorage.token
         };
     }
 

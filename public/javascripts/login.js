@@ -2,7 +2,7 @@
 
     $(document).ready(function() {
 
-        delete window.localStorage['token'];
+        delete window.localStorage.token;
 
         var inpUser = $('#inpLoginUsername'),
             inpPass = $('#inpLoginPassword');
@@ -35,14 +35,13 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 success: function(msg) {
-                    window.localStorage['token'] = msg.token;
-                    window.localStorage['userId'] = msg.userId;
+                    window.localStorage.token = msg.token;
 
                     $.ajax({
                         type: 'POST',
                         url: '/main',
                         data: JSON.stringify({
-                            token: window.localStorage['token']
+                            token: window.localStorage.token
                         }),
                         contentType: 'application/json',
                         success: function(msg) {

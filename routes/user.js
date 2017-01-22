@@ -7,18 +7,14 @@ router.post('/login', function(req, res, next) {
     User.find().byName(req.body.user).exec(function(err, userData) {
         if (err) {
             res.status(404).json(err);
-            return;
-        }
-        if (userData && userData.validPassword(req.body.pass)) {
+        } else if (userData && userData.validPassword(req.body.pass)) {
             var token = userData.generateJwt();
             res.status(200);
             res.json({
-                token: token,
-                userId: userData._id
+                token: token
             });
         } else {
             res.status(404).json('Bad login');
-            return;
         }
     });
 
