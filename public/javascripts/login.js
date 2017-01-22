@@ -25,38 +25,29 @@
                 }
             }
 
-            var data = {
-                user: userName,
-                pass: pass
-            };
             $.ajax({
                 type: 'POST',
                 url: '/user/login',
-                data: JSON.stringify(data),
+                data: JSON.stringify({
+                    user: userName,
+                    pass: pass
+                }),
                 contentType: 'application/json',
-                success: function(msg) {
-                    window.localStorage.token = msg.token;
-
-                    $.ajax({
-                        type: 'POST',
-                        url: '/main',
-                        data: JSON.stringify({
-                            token: window.localStorage.token
-                        }),
-                        contentType: 'application/json',
-                        success: function(msg) {
-                            window.location = '/main';
-                        },
-                        error: loginError
-                    });
-                },
-                error: loginError
+                success: function(resp) {
+                    if (resp.success) {
+                        window.localStorage.token = resp.token;
+                        $.ajax({
+                            type: 'POST',
+                            url: '/main',
+                            data: JSON.stringify({ token:window.localStorage.token }),
+                            contentType: 'application/json',
+                            success: function(msg) { window.location = '/main'; }
+                        });
+                    } else if (resp.msg) {
+                        bootbox.alert(resp.msg);
+                    }
+                }
             });
-
-            function loginError(msg) {
-                bootbox.alert('Bad login.');
-                console.error(msg);
-            }
         }
 
     });

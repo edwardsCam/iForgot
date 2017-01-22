@@ -41,15 +41,15 @@
                 data: JSON.stringify(data),
                 contentType: 'application/json',
                 success: function(resp) {
-                    bootbox.alert('Register successful!', function() {
-                        window.location = '/login';
-                    });
-                },
-                error: function(err) {
-                    bootbox.alert(err.responseText);
+                    if (resp.success) {
+                        bootbox.alert('Registration successful!', function() {
+                            window.location = '/login';
+                        });
+                    } else if (resp.msg) {
+                        bootbox.alert(resp.msg);
+                    }
                 }
             });
-
         }
 
     });
