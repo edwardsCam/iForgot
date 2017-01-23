@@ -14,7 +14,13 @@
             type: 'GET',
             url: '/todo/' + userId,
             headers: headers(),
-            success: populateTable
+            success: function(resp) {
+                if (resp.success === false) {
+                    window.location = '/login';
+                } else {
+                    populateTable(resp);
+                }
+            }
         });
     });
 

@@ -1,4 +1,6 @@
 var express = require('express'),
+    jwt = require('jsonwebtoken'),
+    config = require('../cfg/config'),
     User = require('../schemas/User'),
     ObjectId = require('mongodb').ObjectId,
     router = express.Router();
@@ -28,6 +30,10 @@ router.get('/register', function(req, res, next) {
 // get main
 // render todo list
 router.post('/main', ensureAuthorized, function(req, res, next) {
+    if (req.success === false) {
+        res.redirect('/login');
+        return;
+    }
     res.status(200).json({});
 });
 
@@ -35,12 +41,17 @@ router.get('/main', function(req, res, next) {
     if (wasDirectedHere(req)) {
         res.render('todo', titleObj);
     } else {
-        next();
+        res.redirect('/login');
     }
-}, invalidAccess);
+});
 
 // get list of todo items for a user
 router.get('/todo/:userId', ensureAuthorized, function(req, res, next) {
+
+    if (req.success === false) {
+        res.redirect('/login');
+        return;
+    }
 
     var userId = new ObjectId(req.params.userId);
     User.find().byId(userId).exec(function(err, userData) {
@@ -53,14 +64,15 @@ router.get('/todo/:userId', ensureAuthorized, function(req, res, next) {
 // set the list of todo items for a user
 router.post('/todo/:userId', ensureAuthorized, function(req, res, next) {
 
+    if (req.success === false) {
+        res.redirect('/login');
+        return;
+    }
+
     var userId = new ObjectId(req.params.userId);
-    var query = {
-        _id: userId
-    };
+    var query = { _id:userId };
     var options = {
-        $set: {
-            todo: req.body
-        }
+        $set: { todo:req.body }
     };
 
     User.update(query, options, function(err, userData) {
@@ -74,17 +86,12 @@ function ensureAuthorized(req, res, next) {
     var authHeader = req.headers['authorization'];
     if (authHeader) {
         var token = authHeader.split(' ')[1];
-        if (token) {
-            next();
-            return;
-        }
-    }
-    res.sendStatus(401);
-}
-
-function invalidAccess(req, res, next) {
-    res.sendStatus(401);
-    console.log('you lose, good day sir');
+        jwt.verify(token, config.secret, function(err, decoded) {
+            if (err) fail();
+            else next();
+        });
+    } else fail();
+    function fail() { res.json({ success:false }) }
 }
 
 function wasDirectedHere(req) {

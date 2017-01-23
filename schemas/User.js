@@ -21,29 +21,23 @@ userSchema.methods.hashAndSetPassword = function(plaintext) {
     this.hash = crypto.pbkdf2Sync(plaintext, this.salt, 1000, 64).toString('hex');
 };
 userSchema.methods.validPassword = function(plaintext) {
-    var hash = crypto.pbkdf2Sync(plaintext, this.salt, 1000, 64).toString('hex');
-    return hash === this.hash;
+    return this.hash === crypto.pbkdf2Sync(plaintext, this.salt, 1000, 64).toString('hex');
 };
 userSchema.methods.generateJwt = function() {
-    var expiry = new Date();
-    expiry.setDate(expiry.getDate() + 7);
-
-    return jwt.sign({
+    var payload = {
         userId: this._id,
-        userName: this.userName,
-        exp: parseInt(expiry.getTime() / 1000)
-    }, config.secret);
+        userName: this.userName
+    };
+    return jwt.sign(payload, config.secret, {
+        expiresIn: 300 // 5 minutes
+    });
 };
 
 userSchema.query.byName = function(name) {
-    return this.findOne({
-        userName: name
-    });
+    return this.findOne({ userName:name });
 }
 userSchema.query.byId = function(id) {
-    return this.findOne({
-        _id: id
-    });
+    return this.findOne({ _id:id });
 }
 
 module.exports = mongoose.model('User', userSchema);

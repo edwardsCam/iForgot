@@ -33,12 +33,12 @@ describe('Todo list', function() {
             var userId = resp._id;
             request(app)
                 .get('/todo/' + userId)
-                .expect(401)
+                .expect(200)
                 .end(finish);
         }
-        function finish(err) {
+        function finish(err, res) {
             User.remove(testUserQuery(), function() {
-                if (!err) done();
+                if (!err && res.body.success === false) done();
             });
         }
     }
