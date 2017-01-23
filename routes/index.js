@@ -5,30 +5,21 @@ var express = require('express'),
     ObjectId = require('mongodb').ObjectId,
     router = express.Router();
 
-var titleObj = {
-    title: 'I forgot'
-};
+var titleObj = { title:'Todo' };
 
-// get homepage
-// redirect to login
 router.get('/', function(req, res, next) {
     res.redirect('/login');
 });
 
-// get login
-// render login
 router.get('/login', function(req, res, next) {
     res.render('login', titleObj);
 });
 
-// get register
-// render register
 router.get('/register', function(req, res, next) {
     res.render('register', titleObj);
 });
 
-// get main
-// render todo list
+// login will post here, and only that post should get past the authentication middleware
 router.post('/main', ensureAuthorized, function(req, res, next) {
     if (req.success === false) {
         res.redirect('/login');
@@ -37,6 +28,8 @@ router.post('/main', ensureAuthorized, function(req, res, next) {
     res.status(200).json({});
 });
 
+// only grant access if redirected here from the login screen.
+// this prevents directly accessing the '/main' url.
 router.get('/main', function(req, res, next) {
     if (wasDirectedHere(req)) {
         res.render('todo', titleObj);
@@ -45,43 +38,39 @@ router.get('/main', function(req, res, next) {
     }
 });
 
-// get list of todo items for a user
+// get the list of todo items for this user,
+// but only if the token is authorized
 router.get('/todo/:userId', ensureAuthorized, function(req, res, next) {
-
     if (req.success === false) {
         res.redirect('/login');
         return;
     }
-
     var userId = new ObjectId(req.params.userId);
     User.find().byId(userId).exec(function(err, userData) {
         if (err) console.error(err);
         if (userData) res.send(userData.todo);
     });
-
 });
 
-// set the list of todo items for a user
+// save the list of todo items for this user,
+// but only if the token is authorized
 router.post('/todo/:userId', ensureAuthorized, function(req, res, next) {
-
     if (req.success === false) {
         res.redirect('/login');
         return;
     }
-
     var userId = new ObjectId(req.params.userId);
     var query = { _id:userId };
     var options = {
         $set: { todo:req.body }
     };
-
     User.update(query, options, function(err, userData) {
         if (err) console.log(err);
         if (userData) res.send(userData);
     });
-
 });
 
+// authentication middleware
 function ensureAuthorized(req, res, next) {
     var authHeader = req.headers['authorization'];
     if (authHeader) {

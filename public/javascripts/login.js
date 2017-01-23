@@ -38,6 +38,9 @@ module.exports = (function() {
         return true;
     }
 
+    // passed input validation, so request a login on the server.
+    //   if user/pass combo does not match, nothing will happen.
+    //   if user/pass combo is valid, the server will generate and return a token.
     function postToLogin(payload) {
         $.ajax({
             type: 'POST',
@@ -57,6 +60,7 @@ module.exports = (function() {
         }
     }
 
+    // redirect to the main screen, with authentication
     function postToMain() {
         $.ajax({
             type: 'POST',

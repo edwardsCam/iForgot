@@ -2,8 +2,8 @@ var express = require('express'),
     User = require('../schemas/User'),
     router = express.Router();
 
+// if the password hashes match, login by creating a token.
 router.post('/login', function(req, res, next) {
-
     var userName = req.body.userName;
     User.find().byName(userName).exec(function(err, userData) {
         if (err) {
@@ -15,11 +15,10 @@ router.post('/login', function(req, res, next) {
             res.status(200).json(badResponse('Bad login'));
         }
     });
-
 });
 
+// if the userName does not already exist, create it.
 router.post('/register', function(req, res, next) {
-
     var userName = req.body.userName;
     User.find().byName(userName).exec(function(err, userData) {
         if (err) console.error(err);
@@ -45,12 +44,12 @@ router.post('/register', function(req, res, next) {
 });
 
 function goodResponse(msg) {
-    return response(true, msg);
+    return genericResponse(true, msg);
 }
 function badResponse(msg) {
-    return response(false, msg);
+    return genericResponse(false, msg);
 }
-function response(s, m) {
+function genericResponse(s, m) {
     return { success:s, msg:m }
 }
 

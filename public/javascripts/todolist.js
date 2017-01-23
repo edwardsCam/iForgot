@@ -10,6 +10,8 @@
         $('#btnSave').on('click', saveList);
         $('#btnLogout').on('click', logout);
 
+        // get the todo items for the authenticated user.
+        //    if authentication fails, redirect to login.
         $.ajax({
             type: 'GET',
             url: '/todo/' + userId,
@@ -24,11 +26,13 @@
         });
     });
 
+    // fill every row
     function populateTable(data) {
         $('#todolist').empty();
         _.sortBy(data, 'done').forEach(createRow);
     }
 
+    // append a new row.
     function createRow(d) {
         $('.todoDelete button').unbind();
         $('#todolist').append(getRowMarkup(d));
@@ -43,6 +47,7 @@
         }
     }
 
+    // save the local state of the todo items.
     function saveList(event) {
         var data = getClientSideData();
         if (!validate(data)) {
@@ -62,11 +67,12 @@
                     bootbox.alert('Save successful!');
                 },
                 error: function(err) {
-                    bootbox.alert('Error getting todo list.');
+                    bootbox.alert('Error saving todo list.');
                 }
             });
         });
 
+        // get the content of the table (which may have been mutated since load)
         function getClientSideData() {
             return $('#todolist tr').map(function() {
                 var row = $(this),
@@ -76,9 +82,10 @@
             }).toArray();
         }
 
+        // if not marked done, each item must have text.
         function validate(data) {
             return data.every(function(d) {
-                return d.done || !_.isNil(d.desc);
+                return d.done || d.desc;
             });
         }
     }

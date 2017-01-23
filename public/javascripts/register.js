@@ -20,6 +20,8 @@ module.exports = (function() {
         validateInput: validateInput
     };
 
+    // passed input validation, so attempt to register on the server.
+    //   if the user/pass combo is valid (i.e. not already taken), the server will create the user.
     function postToRegister(payload) {
         $.ajax({
             type: 'POST',
