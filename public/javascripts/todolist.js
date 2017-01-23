@@ -30,11 +30,14 @@
     }
 
     function createRow(d) {
+        $('.todoDelete button').unbind();
         $('#todolist').append(getRowMarkup(d));
+        $('.todoDelete button').on('click', deleteRow);
         function getRowMarkup(d) {
             var ret = '<tr>';
             ret += '<td class="todoDone"><input type="checkbox" ' + (d.done ? 'checked disabled' : '') + '></td>';
             ret += '<td class="todoInput"><input class="form-control todoVal" value="' + d.desc + '" ' + (d.done ? 'disabled' : '') + '></td>';
+            ret += '<td class="todoDelete"><button class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></button></td>';
             ret += '</tr>';
             return ret;
         }
@@ -89,6 +92,10 @@
     function logout() {
         delete window.localStorage.token;
         window.location = '/login';
+    }
+
+    function deleteRow() {
+        $(this).closest('tr').remove();
     }
 
     function newRow(text, isChecked) {

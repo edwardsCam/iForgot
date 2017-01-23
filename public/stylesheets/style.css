@@ -9,15 +9,19 @@ table tr td div {
     display: inline-block;
 }
 table tr td.todoInput {
-    width: 95%;
-}
-table tr td.todoInput input {
     width: 100%;
 }
 table tr td.todoDone {
     text-align: right;
     padding-top: 13px !important;
     width: 5%;
+}
+table tr td.todoDelete {
+    width: 10%;
+}
+table tr td.todoDelete button {
+    padding-top: 2px;
+    margin-top: 4px;
 }
 
 .mainDiv {
